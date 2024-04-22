@@ -385,15 +385,15 @@
 
       // Загрузка файлов
       var unityLoader = document.createElement("script");
-      unityLoader.src = "Build/Match4.loader.js";
+      unityLoader.src = "Build/Match5.loader.js";
       unityLoader.onload = () => {
         createUnityInstance(canvas, {
-          dataUrl: "Build/Match4.data.unityweb",
-          frameworkUrl: "Build/Match4.framework.js.unityweb",
-          codeUrl: "Build/Match4.wasm.unityweb",
+          dataUrl: "Build/Match5.data.unityweb",
+          frameworkUrl: "Build/Match5.framework.js.unityweb",
+          codeUrl: "Build/Match5.wasm.unityweb",
           streamingAssetsUrl: "StreamingAssets",
           companyName: "daltonlima.com",
-          productName: "Match4",
+          productName: "Match3",
           productVersion: "1.0",
 	  showBanner: unityShowBanner,
         }, (progress) => {
@@ -413,142 +413,5 @@
       };
       document.body.appendChild(unityLoader);
     </script>
-      <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-
-        <script type="text/javascript">
-
-            vkBridge.send('VKWebAppInit');
-
-
-
-            function initBridge() {
-          const bridge = vkBridge.default;
-          bridge.subscribe((e) => console.log("vkBridge event", e));
-          bridge.send("VKWebAppInit", {});
-      }
-    initBridge();
-      function showAd(adFormat, waterfall){
-
-          const bridge = vkBridge.default;
-          bridge.send("VKWebAppShowNativeAds", {ad_format:adFormat, use_waterfall:waterfall});
-		  bridge.subscribe((e) => {
-          if(e.detail.type == 'VKWebAppShowNativeAdsResult' && e.detail.data.result == true) {
-              ss.SendMessage('VkBridge', 'ShowAdsResult', 'good');
-          }
-          if(e.detail.type == 'VKWebAppShowNativeAdsFailed') {
-             ss.SendMessage('VkBridge', 'ShowAdsResult', 'noGood');
-          }
-        });
-      }
-      function sendPost(text){
-          const bridge = vkBridge.default;
-          bridge.send("VKWebAppShowWallPostBox", {
-            "message": text
-          });
-        }
-      function storageSet(key, value) {
-        const bridge = vkBridge.default;
-        bridge.send("VKWebAppStorageSet", {"key": key, "value": value});
-      }
-      function storageGet(key){
-        const bridge = vkBridge.default;
-        bridge.send("VKWebAppStorageGet", {"keys": [key]});
-        bridge.subscribe((e) => {
-          if(e.detail.type == 'VKWebAppStorageGetResult') {
-            ss.SendMessage('VkBridge', 'StorageGetResult', e.detail.data.keys[0].value);
-          }
-          if(e.detail.type == 'VKWebAppStorageGetFailed') {
-            ss.SendMessage('VkBridge', 'StorageGetResult', 'error');
-          }
-        });
-
-      }
-      function ShowLeaderBoardBox(value){
-        const bridge = vkBridge.default;
-        bridge.send("VKWebAppShowLeaderBoardBox", {user_result:Number(value)})
-         .then(data => console.log(data.success))
-        .catch(error => console.log(error));
-       
-      }
-      function inviteFriend(){
-        const bridge = vkBridge.default;
-        bridge.send("VKWebAppShowInviteBox", {})
-         .then(data => console.log(data.success))  
-        .catch(error => console.log(error));
-       
-      }
-	  function ShowSubscriptionBox(action, item, subscription_id){
-		const bridge = vkBridge.default;
-	
-		if(subscription_id == null || subscription_id == ""){
-			bridge.send("VKWebAppShowSubscriptionBox",  {
-				"action": action,
-				"item": item
-			});
-			bridge.subscribe((e) => {
-			if(e.detail.type == 'VKWebAppShowSubscriptionBoxResult') {
-				ss.SendMessage('VkBridge', 'SubscriptionBoxResult', e.detail.data.success);
-			}
-			if(e.detail.type == 'VKWebAppShowSubscriptionBoxFailed') {
-				ss.SendMessage('VkBridge', 'SubscriptionBoxResult', 'error');
-			}
-        });
-		}
-		if(subscription_id != null && subscription_id != ""){
-			bridge.send("VKWebAppShowSubscriptionBox",  {
-				"action": action,
-				"subscription_id": subscription_id
-			});
-			bridge.subscribe((e) => {
-			if(e.detail.type == 'VKWebAppShowSubscriptionBoxResult') {
-				ss.SendMessage('VkBridge', 'SubscriptionBoxResult', e.detail.data.success);
-			}
-			if(e.detail.type == 'VKWebAppShowSubscriptionBoxFailed') {
-				ss.SendMessage('VkBridge', 'SubscriptionBoxResult', 'error');
-			}
-        });
-        
-		}
-		
-	  }
-	  function AccelerometerStart(refresh_rate){
-        const bridge = vkBridge.default;
-        bridge.send("VKWebAppAccelerometerStart", {"refresh_rate": refresh_rate});
-		bridge.subscribe((e) => {
-			if(e.detail.type == 'VKWebAppAccelerometerChanged') {
-				ss.SendMessage('VkBridge', 'AccelerometerChanged', e.detail.data.x + " " +e.detail.data.y + " "+e.detail.data.z);
-			}
-			if(e.detail.type == 'VKWebAppAccelerometerStartFailed') {
-				ss.SendMessage('VkBridge', 'AccelerometerChanged', 'error');
-			}
-        });
-      }
-	  function AccelerometerStop(){
-        const bridge = vkBridge.default;
-        bridge.send("VKWebAppAccelerometerStop", {});
-      }
-	function CustomSend(nameMethod, paramsJson){
-		var obj = {};
-		if(paramsJson != 'none'){
-			var json = JSON.parse(paramsJson);
-		
-			for (var i = 0; i<json.Key.length; i++) {
-				if(isNaN(json.Body[i])){
-					obj[json.Key[i]] = json.Body[i];
-				}
-				else{
-					obj[json.Key[i]] = parseInt(json.Body[i]);
-				}
-			}
-		}
-		const bridge = vkBridge.default;
-        bridge.send(nameMethod, obj).then(data => {
-			ss.SendMessage('VkBridge', 'SendResult', JSON.stringify(data));})
-		.catch(error => {
-			ss.SendMessage('VkBridge', 'SendResult', JSON.stringify(error));
-		});;
-	  }
-	  
-  </script>
   </body>
 </html>
