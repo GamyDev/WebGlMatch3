@@ -143,8 +143,6 @@
       // Подключаем ATinstance для связи Unity с браузером
       var ATinstance = null;
 
-
-
       function ATinstanceEnable(callback) {
         const checkNull = () => {
           if(ATinstance !== null) {
@@ -416,27 +414,30 @@
       document.body.appendChild(unityLoader);
     </script>
 
+
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
-       <audio id="my_audio" src="LOOP_Happy Happy Village.mp3" controls>
-       <script>
 
-      bridge.subscribe(eventHandler); 
-      function eventHandler(e) {
 
-  const { type, data } = e.detail;
-  switch(type) {
-    case 'VKWebAppViewHide':
-      my_audio.pause(); // Останавливаем воспроизведение аудио 
-      break;
-    case 'VKWebAppViewRestore': 
-      my_audio.play(); // Запускаем воспроизведение
-      break;
-            
+      <audio id="my_audio" src="LOOP_Happy Happy Village.mp3" controls></audio>
+      <script>
+  bridge.subscribe(eventHandler); 
+  function eventHandler(e) {
+    const { type, data } = e.detail;
+    switch(type) {
+      case 'VKWebAppViewHide':
+        my_audio.pause(); // Останавливаем воспроизведение аудио 
+        break;
+      case 'VKWebAppViewRestore': 
+        my_audio.play(); // Запускаем воспроизведение
+        break;
+      
       // Обработчики других событий
       // ...
-
     }
+  }
+</script>
 
+       <script>
        function initBridge() {
           const bridge = vkBridge.default;
           bridge.subscribe((e) => console.log("vkBridge event", e));
