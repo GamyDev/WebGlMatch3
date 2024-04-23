@@ -418,24 +418,21 @@
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
 
 
-      <audio id="my_audio" src="LOOP_Happy Happy Village.mp3" controls></audio>
+     <audio id="my_audio" src="LOOP_Happy Happy Village.mp3" controls onpause="onAudioPause()" onplay="onAudioPlay()"></audio>
+
       <script>
-  bridge.subscribe(eventHandler); 
-  function eventHandler(e) {
-    const { type, data } = e.detail;
-    switch(type) {
-      case 'VKWebAppViewHide':
-        my_audio.pause(); // Останавливаем воспроизведение аудио 
-        break;
-      case 'VKWebAppViewRestore': 
-        my_audio.play(); // Запускаем воспроизведение
-        break;
-      
-      // Обработчики других событий
-      // ...
-    }
-  }
-</script>
+     function onAudioPause() {
+    // Дополнительные действия при паузе аудио
+    // Например, отправка события приостановки в vkBridge
+    // или выполнение других действий
+}
+
+function onAudioPlay() {
+    // Дополнительные действия при воспроизведении аудио
+    // Например, отправка события в vkBridge о начале воспроизведения
+    // или выполнение других действий
+}
+ </script>
 
        <script>
        function initBridge() {
