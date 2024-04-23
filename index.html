@@ -416,23 +416,42 @@
 
 
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+        <audio id="my_audio" src="some-song.mp3" controls>
 
+         <script>
+        // Проверяем, работаем ли мы из мобильного приложения VK
+        if (window.bridge && window.bridge.subscribe) {
+            // Подписываемся на события VKWebAppViewHide и VKWebAppViewRestore
+            window.bridge.subscribe(eventHandler);
+        } else {
+            // Если не из мобильного приложения VK, используем обычное событие visibilitychange
+            document.addEventListener('visibilitychange', eventHandler);
+        }
 
-     <audio id="my_audio" src="LOOP_Happy Happy Village.mp3" controls onpause="onAudioPause()" onplay="onAudioPlay()"></audio>
+        function eventHandler(e) {
+            const { type, data } = e.detail || {}; // Для мобильного приложения VK
+            // Для десктопной версии используем document.hidden
+            const isHidden = document.hidden;
 
-      <script>
-     function onAudioPause() {
-    // Дополнительные действия при паузе аудио
-    // Например, отправка события приостановки в vkBridge
-    // или выполнение других действий
-}
-
-function onAudioPlay() {
-    // Дополнительные действия при воспроизведении аудио
-    // Например, отправка события в vkBridge о начале воспроизведения
-    // или выполнение других действий
-}
- </script>
+            switch(type) {
+                case 'VKWebAppViewHide':
+                    // Если работаем из мобильного приложения VK
+                    document.getElementById('my_audio').pause();
+                    break;
+                case 'VKWebAppViewRestore': 
+                    // Если работаем из мобильного приложения VK
+                    document.getElementById('my_audio').play();
+                    break;
+                default:
+                    // Для десктопной версии
+                    if (isHidden) {
+                        document.getElementById('my_audio').pause();
+                    } else {
+                        document.getElementById('my_audio').play();
+                    }
+            }
+        }
+    </script>
 
        <script>
        function initBridge() {
